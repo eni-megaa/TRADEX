@@ -1,0 +1,16 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/tv-search/(.*)",
+      "destination": "https://symbol-search.tradingview.com/$1"
+    },
+    {
+      "source": "/api/tv-scanner/(.*)",
+      "destination": "https://scanner.tradingview.com/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

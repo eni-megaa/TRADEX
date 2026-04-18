@@ -1,0 +1,171 @@
+@import "tailwindcss";
+
+:root {
+  --app-navy: #0B1120;
+  --app-navy-light: #151F32;
+  --app-navy-hover: #1E2B45;
+  --app-navy-dark: #050810;
+
+  --app-bg-dark: #0B1120;
+  --app-bg-card: #151F32;
+  --app-bg-card-hover: #1E2B45;
+
+  --app-accent: #FFDE21;
+  --app-accent-hover: #E6C61A;
+  --app-accent-cyan: #FFB300;
+
+  --app-success: #10B981;
+  --app-danger: #EF4444;
+
+  --app-white: #ffffff;
+  --app-black: #000000;
+
+  --app-gray-100: #f3f4f6;
+  --app-gray-200: #e5e7eb;
+  --app-gray-300: #d1d5db;
+  --app-gray-400: #9ca3af;
+  --app-gray-500: #6b7280;
+  --app-gray-600: #4b5563;
+  --app-gray-700: #374151;
+  --app-gray-800: #1f2937;
+  --app-gray-900: #111827;
+}
+
+.light {
+  /* Invert navy colors to bright whites/off-whites */
+  --app-navy: #ffffff;
+  --app-navy-light: #f3f4f6;
+  --app-navy-hover: #e5e7eb;
+  --app-navy-dark: #e5e7eb;
+
+  --app-bg-dark: #ffffff;
+  --app-bg-card: #f3f4f6;
+  --app-bg-card-hover: #e5e7eb;
+
+  /* Retain accent and states */
+  --app-accent: #FFDE21;
+  --app-accent-hover: #E6C61A;
+  --app-accent-cyan: #FFB300;
+
+  --app-success: #10B981;
+  --app-danger: #EF4444;
+
+  /* Invert white to dark slate */
+  --app-white: #0f172a;
+  --app-black: #ffffff;
+
+  /* Invert grays linearly */
+  --app-gray-100: #111827;
+  --app-gray-200: #1f2937;
+  --app-gray-300: #374151;
+  --app-gray-400: #4b5563;
+  --app-gray-500: #6b7280;
+  --app-gray-600: #9ca3af;
+  --app-gray-700: #d1d5db;
+  --app-gray-800: #e5e7eb;
+  --app-gray-900: #f3f4f6;
+}
+
+@theme {
+  --color-navy: var(--app-navy);
+  --color-navy-light: var(--app-navy-light);
+  --color-navy-hover: var(--app-navy-hover);
+  --color-navy-dark: var(--app-navy-dark);
+
+  --color-bg-dark: var(--app-bg-dark);
+  --color-bg-card: var(--app-bg-card);
+  --color-bg-card-hover: var(--app-bg-card-hover);
+
+  --color-accent: var(--app-accent);
+  --color-accent-hover: var(--app-accent-hover);
+  --color-accent-cyan: var(--app-accent-cyan);
+
+  --color-success: var(--app-success);
+  --color-danger: var(--app-danger);
+
+  --color-white: var(--app-white);
+  --color-black: var(--app-black);
+
+  --color-gray-100: var(--app-gray-100);
+  --color-gray-200: var(--app-gray-200);
+  --color-gray-300: var(--app-gray-300);
+  --color-gray-400: var(--app-gray-400);
+  --color-gray-500: var(--app-gray-500);
+  --color-gray-600: var(--app-gray-600);
+  --color-gray-700: var(--app-gray-700);
+  --color-gray-800: var(--app-gray-800);
+  --color-gray-900: var(--app-gray-900);
+
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-navy);
+    color: var(--color-white);
+    @apply min-h-screen font-sans antialiased selection:bg-accent/30 selection:text-white transition-colors duration-300;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-white/10 rounded-full hover:bg-white/20 transition-colors;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/5 backdrop-blur-md border border-white/10;
+  }
+
+  .glass-card {
+    @apply bg-navy-light border border-white/5 shadow-2xl;
+  }
+
+  .glow-purple {
+    box-shadow: 0 0 20px -5px rgba(167, 139, 250, 0.3);
+  }
+
+  .glow-cyan {
+    box-shadow: 0 0 20px -5px rgba(6, 182, 212, 0.3);
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent to-accent-cyan;
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
