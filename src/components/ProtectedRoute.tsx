@@ -23,11 +23,11 @@ export const ProtectedRoute = ({ requireAdmin = false, redirectAdmin = false }: 
     return <Navigate to="/login" state={{ error: 'Your account has been suspended. Please contact support.' }} replace />;
   }
 
-  if (requireAdmin && !ADMIN_ROLES.includes(profile?.role)) {
+  if (requireAdmin && (!profile?.role || !ADMIN_ROLES.includes(profile.role))) {
     return <Navigate to="/dashboard" replace />;
   }
 
-  if (redirectAdmin && ADMIN_ROLES.includes(profile?.role)) {
+  if (redirectAdmin && profile?.role && ADMIN_ROLES.includes(profile.role)) {
     return <Navigate to="/admin" replace />;
   }
 

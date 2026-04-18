@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
-import { BookOpen, ArrowUpRight, ArrowDownLeft } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 
 export const AdminLedgerPage = () => {
   const [ledgerLines, setLedgerLines] = useState<any[]>([]);

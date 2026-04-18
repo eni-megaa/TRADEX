@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTradingStore, type Asset } from '../../store/tradingStore';
-import { useThemeStore } from '../../store/themeStore';
 import { Search, TrendingUp, TrendingDown, Trash2, Plus, Minus, X } from 'lucide-react';
-import { supabase } from '../../lib/supabase';
 import { useAuthStore } from '../../store/authStore';
 
 export const TradingWatchlist = () => {
@@ -19,9 +17,8 @@ export const TradingWatchlist = () => {
     searchResults 
   } = useTradingStore();
   const { user } = useAuthStore();
-  const { theme } = useThemeStore();
-  const isDark = theme === 'dark';
   
+
   const [search, setSearch] = useState('');
   const [isSearching, setIsSearching] = useState(false);
 

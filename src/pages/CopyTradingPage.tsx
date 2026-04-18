@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Users, TrendingUp, Trophy, ArrowRight, Activity, ShieldCheck } from 'lucide-react';
-import { useThemeStore } from '../store/themeStore';
+
 
 const TOP_TRADERS = [
   { id: '1', handle: '@CryptoKing', winRate: 84.5, roi: 450.2, aum: '$1.2M', followers: '15.4K', avatar: 'bg-orange-500' },
