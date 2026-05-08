@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
-import { useTradingStore } from '../store/tradingStore';
-import { useThemeStore } from '../store/themeStore';
-import { TradingWatchlist } from '../components/dashboard/TradingWatchlist';
+import { useTradingStore } from '../../store/tradingStore';
+import { useThemeStore } from '../../store/themeStore';
+import { TradingWatchlist } from '../../components/dashboard/TradingWatchlist';
 import { Maximize2, Zap, ArrowLeftRight } from 'lucide-react';
 
 export const TradingPage = () => {

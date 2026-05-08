@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useTradingStore, type Asset } from '../store/tradingStore';
-import { useAuthStore } from '../store/authStore';
-import { supabase } from '../lib/supabase';
+import { useTradingStore, type Asset } from '../../store/tradingStore';
+import { useAuthStore } from '../../store/authStore';
+import { supabase } from '../../lib/supabase';
 import { Sparklines, SparklinesLine } from 'react-sparklines';
 import { Star, TrendingUp, TrendingDown, Search, ArrowRight } from 'lucide-react';
 

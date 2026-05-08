@@ -353,11 +353,11 @@ export const RoadmapSection = () => {
             const rightX = W - cardW - 5;        // right column x
 
             const cardPositions = [
-              { x: leftX,  y: rowY1 },   // Bloomberg        — top-left
+              { x: leftX, y: rowY1 },   // Bloomberg        — top-left
               { x: rightX, y: rowY1 },   // Reuters          — top-right
-              { x: leftX,  y: rowY2 },   // Financial Times  — mid-left
+              { x: leftX, y: rowY2 },   // Financial Times  — mid-left
               { x: rightX, y: rowY2 },   // Forbes           — mid-right
-              { x: leftX,  y: rowY3 },   // WSJ              — bottom-left
+              { x: leftX, y: rowY3 },   // WSJ              — bottom-left
               { x: rightX, y: rowY3 },   // TechCrunch       — bottom-right
             ];
 

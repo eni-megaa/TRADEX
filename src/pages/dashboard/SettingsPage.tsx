@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useAuthStore } from '../store/authStore';
-import { supabase } from '../lib/supabase';
+import { useAuthStore } from '../../store/authStore';
+import { supabase } from '../../lib/supabase';
 import { User, Mail, Shield, Save, Loader2 } from 'lucide-react';
 
 export const SettingsPage = () => {

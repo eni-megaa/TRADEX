@@ -2,12 +2,12 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { Loader2 } from 'lucide-react';
 
-const ADMIN_ROLES = ['admin', 'moderator', 'finance_manager', 'support_agent'];
+const ADMIN_ROLES = ['admin'];
 
 export const ProtectedRoute = ({ requireAdmin = false, redirectAdmin = false }: { requireAdmin?: boolean, redirectAdmin?: boolean }) => {
   const { user, profile, isLoading } = useAuthStore();
 
-  if (isLoading) {
+  if (isLoading || (user && !profile)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-navy text-accent">
         <Loader2 className="w-10 h-10 animate-spin" />

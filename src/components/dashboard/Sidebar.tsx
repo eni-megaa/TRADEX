@@ -61,7 +61,7 @@ export const Sidebar = () => {
   })).filter(group => group.items.length > 0);
 
   return (
-    <div className="w-42 bg-navy border-r border-white/5 flex flex-col h-screen sticky top-0 shrink-0">
+    <div className="w-64 bg-navy border-r border-white/5 flex flex-col h-full sticky top-0 shrink-0">
       <div className="h-16 flex items-center px-4 border-b border-white/5 shrink-0">
         <div className="flex items-center space-x-3">
           <span className="text-xl font-black text-white tracking-widest bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
@@ -70,7 +70,7 @@ export const Sidebar = () => {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto py-6 hide-scrollbar flex flex-col">
+      <div className="flex-1 overflow-y-auto py-6 flex flex-col custom-scrollbar">
         {menuGroups.map((group, idx) => (
           <div key={idx} className="mb-8 px-4">
             <h3 className="text-[10px] font-bold text-gray-500 tracking-widest mb-3 px-4 uppercase">

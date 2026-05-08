@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
-import { useAuthStore } from '../store/authStore';
+import { supabase } from '../../lib/supabase';
+import { useAuthStore } from '../../store/authStore';
 import { TrendingUp, TrendingDown, Target, CheckCircle2 } from 'lucide-react';
 import { Sparklines, SparklinesLine } from 'react-sparklines';
 

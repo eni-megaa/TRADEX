@@ -18,7 +18,7 @@ export const CopyTradingSection = () => {
               Copy <span className="text-white">top investors</span>
             </h2>
             <p className="text-lg text-gray-300 leading-relaxed mb-6 max-w-lg">
-              With TRADEX's innovative <strong>CopyTrader™</strong>, you can automatically copy the moves of other investors. Find investors you believe in and <strong>replicate their actions</strong> in real time.
+              With TRADEX's innovative <strong>CopyTrading feature</strong>, you can automatically copy the moves of top investors on the platform. Find the best investors you believe in and with the highest win rates and<strong>replicate their actions</strong> in real time.
             </p>
 
             <button className="px-8 py-3 rounded-full border-2 border-[#FFDE21] text-[#FFDE21] hover:bg-[#FFDE21] hover:text-black font-semibold transition-all duration-300 mb-8">

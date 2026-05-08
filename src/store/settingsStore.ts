@@ -3,11 +3,13 @@ import { supabase } from '../lib/supabase';
 
 interface SettingsState {
   kycRequired: boolean;
+  settingsLoaded: boolean;
   fetchSettings: () => Promise<void>;
 }
 
 export const useSettingsStore = create<SettingsState>((set) => ({
   kycRequired: true,
+  settingsLoaded: false,
   fetchSettings: async () => {
     try {
       const { data } = await supabase
@@ -17,10 +19,13 @@ export const useSettingsStore = create<SettingsState>((set) => ({
         .single();
       
       if (data) {
-        set({ kycRequired: data.is_enabled });
+        set({ kycRequired: data.is_enabled, settingsLoaded: true });
+      } else {
+        set({ settingsLoaded: true });
       }
     } catch (error) {
       console.error('Error fetching global settings:', error);
+      set({ settingsLoaded: true });
     }
   }
 }));

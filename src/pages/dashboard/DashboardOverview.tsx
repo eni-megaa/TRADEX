@@ -1,8 +1,8 @@
-import { AccountOverview } from '../components/dashboard/AccountOverview';
-import { TradingPanel } from '../components/dashboard/TradingPanel';
+import { AccountOverview } from '../../components/dashboard/AccountOverview';
+import { TradingPanel } from '../../components/dashboard/TradingPanel';
 
-import { WatchlistPanel } from '../components/dashboard/WatchlistPanel';
-import { LiveTrades } from '../components/dashboard/LiveTrades';
+import { WatchlistPanel } from '../../components/dashboard/WatchlistPanel';
+import { LiveTrades } from '../../components/dashboard/LiveTrades';
 
 export const DashboardOverview = () => {
   return (

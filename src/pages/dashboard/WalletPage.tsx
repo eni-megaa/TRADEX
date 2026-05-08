@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabase';
-import { useAuthStore } from '../store/authStore';
+import { supabase } from '../../lib/supabase';
+import { useAuthStore } from '../../store/authStore';
 import { ArrowDownLeft, ArrowUpRight, Clock, CheckCircle, XCircle, CreditCard, ChevronRight, Loader2, Bitcoin, X } from 'lucide-react';
-import { useKYCGuard } from '../hooks/useKYCGuard';
+import { useKYCGuard } from '../../hooks/useKYCGuard';
 
 export const WalletPage = () => {
   const { user, profile } = useAuthStore();

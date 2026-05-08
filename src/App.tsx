@@ -7,18 +7,29 @@ import { useEffect } from 'react';
 import { useAuthStore } from './store/authStore';
 import { supabase } from './lib/supabase';
 import { DashboardLayout } from './components/DashboardLayout';
-import { DashboardOverview } from './pages/DashboardOverview';
-import { WalletPage } from './pages/WalletPage';
-import { TransactionsPage } from './pages/TransactionsPage';
-import { SettingsPage } from './pages/SettingsPage';
-import { TradingPage } from './pages/TradingPage';
-import { PortfolioPage } from './pages/PortfolioPage';
-import { WatchlistPage } from './pages/WatchlistPage';
-import { InsightsPage } from './pages/InsightsPage';
-import { AnalyticsPage } from './pages/AnalyticsPage';
-import { MarketTrendsPage } from './pages/MarketTrendsPage';
-import { CopyTradingPage } from './pages/CopyTradingPage';
-import { SupportPage } from './pages/SupportPage';
+import { ToastSystem } from './components/dashboard/ToastSystem';
+
+// Dashboard User Flow
+import { DashboardOverview } from './pages/dashboard/DashboardOverview';
+import { WalletPage } from './pages/dashboard/WalletPage';
+import { TransactionsPage } from './pages/dashboard/TransactionsPage';
+import { TradingPage } from './pages/dashboard/TradingPage';
+import { PortfolioPage } from './pages/dashboard/PortfolioPage';
+import { WatchlistPage } from './pages/dashboard/WatchlistPage';
+import { InsightsPage } from './pages/dashboard/InsightsPage';
+import { AnalyticsPage } from './pages/dashboard/AnalyticsPage';
+import { MarketTrendsPage } from './pages/dashboard/MarketTrendsPage';
+import { CopyTradingPage } from './pages/dashboard/CopyTradingPage';
+import { SettingsPage } from './pages/dashboard/SettingsPage';
+import { KYCPage } from './pages/dashboard/KYCPage';
+
+// Support System User Flow
+import { SupportPage } from './pages/support/SupportPage';
+import { TicketsPage } from './pages/support/TicketsPage';
+import { TicketDetailsPage } from './pages/support/TicketDetailsPage';
+import { CallbackRequestPage } from './pages/support/CallbackRequestPage';
+
+// Admin Flow
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { UsersPage } from './pages/admin/UsersPage';
 import { TransactionsAdminPage } from './pages/admin/TransactionsAdminPage';
@@ -30,10 +41,8 @@ import { TradingControlPage } from './pages/admin/TradingControlPage';
 import { AssetManagementPage } from './pages/admin/AssetManagementPage';
 import { NotificationsPage } from './pages/admin/NotificationsPage';
 import { AuditLogsPage } from './pages/admin/AuditLogsPage';
-import { ToastSystem } from './components/dashboard/ToastSystem';
-
-// KYC User Flow
-import { KYCPage } from './pages/dashboard/KYCPage';
+import { AdminSupportPage } from './pages/admin/SupportTicketsPage';
+import { AdminTicketDetailsPage } from './pages/admin/AdminTicketDetailsPage';
 
 // Company Pages
 import { AboutUsPage } from './pages/company/AboutUsPage';
@@ -84,67 +93,72 @@ function App() {
     <>
       <ToastSystem />
       <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      
-      {/* Public Tools Routes hosted in PublicLayout */}
-      <Route element={<PublicLayout />}>
-        <Route path="/tools/analytical" element={<AnalyticalToolsPage />} />
-        <Route path="/tools/economic-calendar" element={<EconomicCalendarPage />} />
-        <Route path="/tools/calculator" element={<TradingCalculatorPage />} />
-        <Route path="/tools/converter" element={<CurrencyConverterPage />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        
+        {/* Public Tools Routes hosted in PublicLayout */}
+        <Route element={<PublicLayout />}>
+          <Route path="/tools/analytical" element={<AnalyticalToolsPage />} />
+          <Route path="/tools/economic-calendar" element={<EconomicCalendarPage />} />
+          <Route path="/tools/calculator" element={<TradingCalculatorPage />} />
+          <Route path="/tools/converter" element={<CurrencyConverterPage />} />
 
-        {/* Company Routes */}
-        <Route path="/about" element={<AboutUsPage />} />
-        <Route path="/careers" element={<CareersPage />} />
-        <Route path="/partners" element={<PartnersPage />} />
-        <Route path="/contact" element={<ContactPage />} />
+          {/* Company Routes */}
+          <Route path="/about" element={<AboutUsPage />} />
+          <Route path="/careers" element={<CareersPage />} />
+          <Route path="/partners" element={<PartnersPage />} />
+          <Route path="/contact" element={<ContactPage />} />
 
-        {/* Legal Routes */}
-        <Route path="/terms" element={<TermsPage />} />
-        <Route path="/privacy" element={<PrivacyPage />} />
-        <Route path="/risk-disclosure" element={<RiskPage />} />
-        <Route path="/aml-policy" element={<AMLPage />} />
-      </Route>
-      
-      {/* Protected Dashboard Routes */}
-      <Route element={<ProtectedRoute redirectAdmin={true} />}>
-        <Route element={<DashboardLayout />}>
-          <Route path="/dashboard" element={<DashboardOverview />} />
-          <Route path="/dashboard/portfolio" element={<PortfolioPage />} />
-          <Route path="/dashboard/wallet" element={<WalletPage />} />
-          <Route path="/dashboard/watchlist" element={<WatchlistPage />} />
-          <Route path="/dashboard/trade" element={<TradingPage />} />
-          <Route path="/dashboard/transactions" element={<TransactionsPage />} />
-          <Route path="/dashboard/insights" element={<InsightsPage />} />
-          <Route path="/dashboard/analytics" element={<AnalyticsPage />} />
-          <Route path="/dashboard/trends" element={<MarketTrendsPage />} />
-          <Route path="/dashboard/copy-trading" element={<CopyTradingPage />} />
-          <Route path="/dashboard/kyc" element={<KYCPage />} />
-          <Route path="/dashboard/support" element={<SupportPage />} />
-          <Route path="/dashboard/settings" element={<SettingsPage />} />
+          {/* Legal Routes */}
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/risk-disclosure" element={<RiskPage />} />
+          <Route path="/aml-policy" element={<AMLPage />} />
         </Route>
-      </Route>
-
-      {/* Admin Protected Routes */}
-      <Route element={<ProtectedRoute requireAdmin={true} />}>
-        <Route element={<DashboardLayout isAdmin={true} />}>
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/users" element={<UsersPage />} />
-          <Route path="/admin/deposits" element={<TransactionsAdminPage type="deposit" />} />
-          <Route path="/admin/withdrawals" element={<TransactionsAdminPage type="withdrawal" />} />
-          <Route path="/admin/kyc" element={<KYCVerificationPage />} />
-          <Route path="/admin/trades" element={<TradingControlPage />} />
-          <Route path="/admin/assets" element={<AssetManagementPage />} />
-          <Route path="/admin/providers" element={<AdminPaymentProvidersPage />} />
-          <Route path="/admin/ledger" element={<AdminLedgerPage />} />
-          <Route path="/admin/notifications" element={<NotificationsPage />} />
-          <Route path="/admin/settings" element={<PlatformSettingsPage />} />
-          <Route path="/admin/logs" element={<AuditLogsPage />} />
+        
+        {/* Protected Dashboard Routes */}
+        <Route element={<ProtectedRoute redirectAdmin={true} />}>
+          <Route element={<DashboardLayout />}>
+            <Route path="/dashboard" element={<DashboardOverview />} />
+            <Route path="/dashboard/portfolio" element={<PortfolioPage />} />
+            <Route path="/dashboard/wallet" element={<WalletPage />} />
+            <Route path="/dashboard/watchlist" element={<WatchlistPage />} />
+            <Route path="/dashboard/trade" element={<TradingPage />} />
+            <Route path="/dashboard/transactions" element={<TransactionsPage />} />
+            <Route path="/dashboard/insights" element={<InsightsPage />} />
+            <Route path="/dashboard/analytics" element={<AnalyticsPage />} />
+            <Route path="/dashboard/trends" element={<MarketTrendsPage />} />
+            <Route path="/dashboard/copy-trading" element={<CopyTradingPage />} />
+            <Route path="/dashboard/kyc" element={<KYCPage />} />
+            <Route path="/dashboard/support" element={<SupportPage />} />
+            <Route path="/dashboard/support/tickets" element={<TicketsPage />} />
+            <Route path="/dashboard/support/tickets/:id" element={<TicketDetailsPage />} />
+            <Route path="/dashboard/support/callback" element={<CallbackRequestPage />} />
+            <Route path="/dashboard/settings" element={<SettingsPage />} />
+          </Route>
         </Route>
-      </Route>
-    </Routes>
+
+        {/* Admin Protected Routes */}
+        <Route element={<ProtectedRoute requireAdmin={true} />}>
+          <Route element={<DashboardLayout isAdmin={true} />}>
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/users" element={<UsersPage />} />
+            <Route path="/admin/deposits" element={<TransactionsAdminPage type="deposit" />} />
+            <Route path="/admin/withdrawals" element={<TransactionsAdminPage type="withdrawal" />} />
+            <Route path="/admin/kyc" element={<KYCVerificationPage />} />
+            <Route path="/admin/trades" element={<TradingControlPage />} />
+            <Route path="/admin/assets" element={<AssetManagementPage />} />
+            <Route path="/admin/providers" element={<AdminPaymentProvidersPage />} />
+            <Route path="/admin/ledger" element={<AdminLedgerPage />} />
+            <Route path="/admin/support" element={<AdminSupportPage />} />
+            <Route path="/admin/support/tickets/:id" element={<AdminTicketDetailsPage />} />
+            <Route path="/admin/notifications" element={<NotificationsPage />} />
+            <Route path="/admin/settings" element={<PlatformSettingsPage />} />
+            <Route path="/admin/logs" element={<AuditLogsPage />} />
+          </Route>
+        </Route>
+      </Routes>
     </>
   );
 }

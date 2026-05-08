@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabase';
-import { useAuthStore } from '../store/authStore';
+import { supabase } from '../../lib/supabase';
+import { useAuthStore } from '../../store/authStore';
 import { Clock, ArrowDownLeft, ArrowUpRight, CheckCircle, XCircle } from 'lucide-react';
 
 export const TransactionsPage = () => {

@@ -2,12 +2,13 @@ import { NavLink } from 'react-router-dom';
 import { 
   LayoutDashboard, Users, Wallet, Activity, 
   Database, ShieldCheck, Settings, LogOut, 
-  MessageSquare, FileText, CreditCard, BookOpen
+  MessageSquare, FileText, CreditCard, BookOpen,
+  Headphones
 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 
 export const AdminSidebar = () => {
-  const { signOut, profile } = useAuthStore();
+  const { signOut } = useAuthStore();
 
   const menuGroups = [
     {
@@ -23,6 +24,7 @@ export const AdminSidebar = () => {
         { icon: Wallet, label: 'Deposits', path: '/admin/deposits' },
         { icon: Activity, label: 'Withdrawals', path: '/admin/withdrawals' },
         { icon: ShieldCheck, label: 'KYC Verification', path: '/admin/kyc' },
+        { icon: Headphones, label: 'Support Control', path: '/admin/support' },
       ],
     },
     {
@@ -49,25 +51,11 @@ export const AdminSidebar = () => {
     }
   ];
 
-  // Role-based filtering (basic version)
-  const filteredGroups = menuGroups.map(group => {
-    if (profile?.role === 'moderator') {
-      return {
-        ...group,
-        items: group.items.filter(item => ['Overview', 'Users', 'KYC Verification'].includes(item.label))
-      };
-    }
-    if (profile?.role === 'finance_manager') {
-       return {
-        ...group,
-        items: group.items.filter(item => ['Overview', 'Deposits', 'Withdrawals'].includes(item.label))
-      };
-    }
-    return group;
-  }).filter(group => group.items.length > 0);
+  // All admins see all menu items
+  const filteredGroups = menuGroups;
 
   return (
-    <div className="w-42 bg-navy border-r border-white/5 flex flex-col h-screen sticky top-0 shrink-0">
+    <div className="w-64 bg-navy border-r border-white/5 flex flex-col h-full sticky top-0 shrink-0">
       <div className="h-16 flex items-center px-4 border-b border-white/5 shrink-0">
         <div className="flex items-center space-x-3">
           <div>
@@ -81,7 +69,7 @@ export const AdminSidebar = () => {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto py-8 hide-scrollbar flex flex-col">
+      <div className="flex-1 overflow-y-auto py-8 flex flex-col custom-scrollbar">
         {filteredGroups.map((group, idx) => (
           <div key={idx} className="mb-8 px-4">
             <h3 className="text-[10px] font-bold text-gray-500 tracking-widest mb-4 px-4 uppercase">

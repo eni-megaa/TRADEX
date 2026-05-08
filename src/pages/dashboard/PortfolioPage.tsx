@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useTradingStore } from '../store/tradingStore';
-import { useAuthStore } from '../store/authStore';
-import { supabase } from '../lib/supabase';
+import { useTradingStore } from '../../store/tradingStore';
+import { useAuthStore } from '../../store/authStore';
+import { supabase } from '../../lib/supabase';
 import { PieChart, TrendingUp, TrendingDown, DollarSign, Activity, Download } from 'lucide-react';
 import { Sparklines, SparklinesLine } from 'react-sparklines';
 

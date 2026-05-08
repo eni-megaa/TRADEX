@@ -7,7 +7,7 @@ export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isResourcesHovered, setIsResourcesHovered] = useState(false);
   const [isResourcesClicked, setIsResourcesClicked] = useState(false);
-  
+
   const showResourcesDropdown = isResourcesHovered || isResourcesClicked;
 
   const links = [
@@ -34,7 +34,7 @@ export const Navbar = () => {
               TRADE<span className="text-accent">X</span>
             </Link>
           </div>
-          
+
           {/* Desktop Menu */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-center space-x-8">
@@ -49,14 +49,14 @@ export const Navbar = () => {
                   </a>
                 )
               ))}
-              
+
               {/* Resources Dropdown */}
-              <div 
+              <div
                 className="relative rounded-md"
                 onMouseEnter={() => setIsResourcesHovered(true)}
                 onMouseLeave={() => setIsResourcesHovered(false)}
               >
-                <button 
+                <button
                   onClick={() => setIsResourcesClicked(!isResourcesClicked)}
                   className={`transition-colors text-sm font-medium flex items-center py-2 ${showResourcesDropdown ? 'text-accent' : 'text-gray-300 hover:text-accent'}`}
                 >
@@ -90,7 +90,7 @@ export const Navbar = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="hidden md:flex items-center space-x-4">
             <ThemeToggle />
             <Link to="/login" className="text-white hover:text-accent transition-colors font-medium">
@@ -139,7 +139,7 @@ export const Navbar = () => {
                 </a>
               )
             ))}
-            
+
             <div className="px-3 py-2 text-base font-medium text-white border-b border-white/10 mt-2 mb-1">
               Resources
             </div>
@@ -153,6 +153,7 @@ export const Navbar = () => {
                 {link.name}
               </Link>
             ))}
+
             <div className="pt-4 flex flex-col space-y-2 px-3">
               <Link to="/login" className="text-center text-white py-2 hover:text-accent transition-colors font-medium">
                 Login

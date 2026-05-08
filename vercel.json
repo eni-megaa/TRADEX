@@ -9,6 +9,14 @@
       "destination": "https://scanner.tradingview.com/$1"
     },
     {
+      "source": "/api/news/(.*)",
+      "destination": "https://min-api.cryptocompare.com/$1"
+    },
+    {
+      "source": "/api/fgi/(.*)",
+      "destination": "https://api.alternative.me/$1"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

@@ -1,9 +1,11 @@
-import { HeadphonesIcon, MessageCircle, FileText, Mail, Loader2, CheckCircle } from 'lucide-react';
+import { HeadphonesIcon, MessageCircle, FileText, Mail, Loader2, CheckCircle, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
-import { useAuthStore } from '../store/authStore';
-import { sendSupportRequestNotification } from '../lib/adminNotifications';
+import { useNavigate } from 'react-router-dom';
+import { useAuthStore } from '../../store/authStore';
+import { sendSupportRequestNotification } from '../../lib/adminNotifications';
 
 export const SupportPage = () => {
+  const navigate = useNavigate();
   const { user, profile } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
@@ -56,16 +58,31 @@ export const SupportPage = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="bg-navy-light/40 border border-white/5 p-4 rounded-3xl hover:bg-white/5 transition-colors cursor-pointer group">
-              <Mail className="w-5 h-5 text-accent-cyan mb-2 group-hover:scale-110 transition-transform" />
+            {/* Email Support → Tickets */}
+            <button
+              onClick={() => navigate('/dashboard/support/tickets')}
+              className="bg-navy-light/40 border border-white/5 p-4 rounded-3xl hover:bg-white/5 hover:border-white/15 transition-all cursor-pointer group text-left w-full"
+            >
+              <div className="flex items-start justify-between">
+                <Mail className="w-5 h-5 text-accent-cyan mb-2 group-hover:scale-110 transition-transform" />
+                <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-accent-cyan group-hover:translate-x-0.5 transition-all" />
+              </div>
               <h4 className="font-bold text-white text-sm mb-1">Email Support</h4>
-              <p className="text-[10px] text-gray-500">support@tradex.com</p>
-            </div>
-            <div className="bg-navy-light/40 border border-white/5 p-4 rounded-3xl hover:bg-white/5 transition-colors cursor-pointer group">
-              <HeadphonesIcon className="w-5 h-5 text-orange-500 mb-2 group-hover:scale-110 transition-transform" />
+              <p className="text-[10px] text-gray-500">Open & manage support tickets.</p>
+            </button>
+            
+            {/* Phone Call → Callback */}
+            <button
+              onClick={() => navigate('/dashboard/support/callback')}
+              className="bg-navy-light/40 border border-white/5 p-4 rounded-3xl hover:bg-white/5 hover:border-white/15 transition-all cursor-pointer group text-left w-full"
+            >
+              <div className="flex items-start justify-between">
+                <HeadphonesIcon className="w-5 h-5 text-orange-500 mb-2 group-hover:scale-110 transition-transform" />
+                <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-orange-400 group-hover:translate-x-0.5 transition-all" />
+              </div>
               <h4 className="font-bold text-white text-sm mb-1">Phone Call</h4>
               <p className="text-[10px] text-gray-500">Schedule a callback.</p>
-            </div>
+            </button>
           </div>
         </div>
 

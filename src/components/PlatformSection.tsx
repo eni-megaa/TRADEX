@@ -8,7 +8,7 @@ export const PlatformSection = () => {
       icon: Headset,
       iconColor: "#FFDE21",
       title: "Personalized Client Services",
-      description: "Dedicated, round-the-clock support tailored to your specific trading needs and long-term goals.",
+      description: "Dedicated, round-the-clock support/assistants tailored to your specific trading needs and long-term trading goals.",
       features: ["24/7 Dedicated Support", "Multi-lingual Assistance", "Priority Routing", "One-on-One Consultations"],
     },
     {
@@ -16,15 +16,15 @@ export const PlatformSection = () => {
       icon: Briefcase,
       iconColor: "#4ade80",
       title: "Account Management",
-      description: "Advanced administrative tools to help you organize, track, and optimize your investments seamlessly.",
-      features: ["Portfolio Analytics", "Risk Management Tools", "Secure Funding", "Automated Reports"],
+      description: "Advanced administrative tools and personels to help you organize, track, and optimize your investments seamlessly.",
+      features: ["Portfolio Analytics", "Risk Management Tools", "Secure Funding", "Trade advisors"],
     },
     {
       id: "training",
       icon: GraduationCap,
       iconColor: "#60a5fa",
       title: "Basic Trading Training",
-      description: "Comprehensive educational resources, interactive webinars, and beginner-friendly guides to build your foundation.",
+      description: "Comprehensive educational resources, interactive webinars, and beginner-friendly guides and helpful tutorial videos to build your foundation.",
       features: ["Video Tutorials", "Live Webinars", "Market Analysis", "Demo Accounts"],
     }
   ];
@@ -35,8 +35,8 @@ export const PlatformSection = () => {
       <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-accent/5 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-blue-500/5 blur-[150px] rounded-full pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-20">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="text-center max-w-3xl mx-auto mb-14">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -67,7 +67,7 @@ export const PlatformSection = () => {
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {offerings.map((item, index) => {
             const Icon = item.icon;
             return (

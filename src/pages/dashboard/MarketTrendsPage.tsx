@@ -1,5 +1,5 @@
 import { TrendingDown, TrendingUp, Activity } from 'lucide-react';
-import { useTradingStore } from '../store/tradingStore';
+import { useTradingStore } from '../../store/tradingStore';
 import { useEffect } from 'react';
 
 export const MarketTrendsPage = () => {
