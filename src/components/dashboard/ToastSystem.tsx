@@ -13,6 +13,8 @@ interface Notification {
   category?: string;
 }
 
+const STAFF_ROLES = ['admin', 'moderator', 'finance_manager', 'support_agent'];
+
 export const ToastSystem = () => {
   const { user, profile } = useAuthStore();
   const [activeToasts, setActiveToasts] = useState<Notification[]>([]);
@@ -32,7 +34,7 @@ export const ToastSystem = () => {
         if (!['warning', 'urgent'].includes(newNotif.type)) return;
 
         // Admins don't see toast for their own broadcasts
-        if (profile?.role === 'admin') return;
+        if (profile?.role && STAFF_ROLES.includes(profile.role)) return;
 
         // Filter by Target (matching current user context)
         let isTargeted = false;

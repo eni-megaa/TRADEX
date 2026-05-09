@@ -180,10 +180,10 @@ export const UsersPage = () => {
                     </td>
                     <td className="p-6">
                        <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${
-                        u.kyc_status === 'verified' ? 'bg-green-500/10 text-green-500' : 
-                        u.kyc_status === 'pending' ? 'bg-orange-500/10 text-orange-500' : 'bg-gray-500/10 text-gray-500'
+                        u.kyc_status === 'approved' ? 'bg-green-500/10 text-green-500' : 
+                        u.kyc_status === 'under_review' ? 'bg-orange-500/10 text-orange-500' : 'bg-gray-500/10 text-gray-500'
                       }`}>
-                        {u.kyc_status || 'Unverified'}
+                        {u.kyc_status?.replace('_', ' ') || 'Not Started'}
                       </span>
                     </td>
                     <td className="p-6 text-right space-x-2">

@@ -2,7 +2,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { Loader2 } from 'lucide-react';
 
-const ADMIN_ROLES = ['admin'];
+const ADMIN_ROLES = ['admin', 'moderator', 'finance_manager', 'support_agent'];
 
 export const ProtectedRoute = ({ requireAdmin = false, redirectAdmin = false }: { requireAdmin?: boolean, redirectAdmin?: boolean }) => {
   const { user, profile, isLoading } = useAuthStore();

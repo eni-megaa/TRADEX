@@ -4,6 +4,9 @@ import { createAdminNotification } from '../../lib/adminNotifications';
 import { useAuthStore } from '../../store/authStore';
 import { CheckCircle, Upload, ShieldCheck, FileText, Loader2, User as UserIcon, AlertCircle } from 'lucide-react';
 
+const MAX_KYC_FILE_SIZE = 10 * 1024 * 1024;
+const ALLOWED_KYC_FILE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
+
 export const KYCPage = () => {
   const { user, profile, fetchProfile } = useAuthStore();
   const [step, setStep] = useState(1);
@@ -31,9 +34,29 @@ export const KYCPage = () => {
   });
 
   const handleFileChange = (field: keyof typeof files, e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFiles({ ...files, [field]: e.target.files[0] });
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!ALLOWED_KYC_FILE_TYPES.includes(file.type)) {
+      setMsg({ type: 'error', text: 'Please upload JPG, PNG, WebP, or PDF files only.' });
+      e.target.value = '';
+      return;
     }
+
+    if (field === 'selfie' && !file.type.startsWith('image/')) {
+      setMsg({ type: 'error', text: 'Selfie verification must be an image file.' });
+      e.target.value = '';
+      return;
+    }
+
+    if (file.size > MAX_KYC_FILE_SIZE) {
+      setMsg({ type: 'error', text: 'Each KYC file must be 10MB or smaller.' });
+      e.target.value = '';
+      return;
+    }
+
+    setMsg(null);
+    setFiles({ ...files, [field]: file });
   };
 
   const submitKYC = async () => {
@@ -51,11 +74,15 @@ export const KYCPage = () => {
       // 1. Upload files to Storage
       const uploadPromises = Object.entries(files).map(async ([docType, file]) => {
         if (!file) return null;
-        const filePath = `${user.id}/${docType}-${Date.now()}`;
+        const extension = file.name.includes('.') ? file.name.split('.').pop()?.toLowerCase() : undefined;
+        const filePath = `${user.id}/${docType}-${Date.now()}${extension ? `.${extension}` : ''}`;
         
         const { error: uploadError } = await supabase.storage
           .from('kyc_documents')
-          .upload(filePath, file);
+          .upload(filePath, file, {
+            contentType: file.type,
+            upsert: false
+          });
 
         if (uploadError) throw uploadError;
 
@@ -66,6 +93,10 @@ export const KYCPage = () => {
             user_id: user.id,
             document_type: docType,
             document_url: filePath,
+            personal_info: personalInfo,
+            file_name: file.name,
+            file_mime_type: file.type,
+            file_size: file.size,
             status: 'pending'
           });
 
@@ -84,7 +115,7 @@ export const KYCPage = () => {
       await fetchProfile(user.id);
 
       // Notify admins about new KYC submission
-      createAdminNotification({
+      await createAdminNotification({
         title: 'New KYC Submission',
         message: `${profile?.full_name || user.email} has submitted KYC documents for review.`,
         type: 'kyc_submission'
@@ -223,7 +254,7 @@ export const KYCPage = () => {
                     <span className="px-4 py-2 bg-white/5 rounded-lg text-xs font-bold font-mono">
                       {files[doc.id as keyof typeof files] ? files[doc.id as keyof typeof files]?.name : 'Browse File'}
                     </span>
-                    <input type="file" className="hidden" accept="image/*,.pdf" onChange={(e) => handleFileChange(doc.id as keyof typeof files, e)} />
+                    <input type="file" className="hidden" accept="image/jpeg,image/png,image/webp,application/pdf" onChange={(e) => handleFileChange(doc.id as keyof typeof files, e)} />
                   </label>
                 </div>
               ))}

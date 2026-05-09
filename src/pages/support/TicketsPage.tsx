@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { Plus, Ticket, CheckCircle2, AlertCircle, ChevronRight, Loader2, ArrowLeft, Search, Filter } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { fetchUserTickets, createTicket, type SupportTicket } from '../../lib/supportService';
-import { sendSupportRequestNotification } from '../../lib/adminNotifications';
 
 const STATUS_CONFIG: Record<string, { color: string; bg: string; icon: any; label: string }> = {
   open: { color: 'text-blue-400', bg: 'bg-blue-500/15 border-blue-500/30', icon: AlertCircle, label: 'Open' },
@@ -17,13 +16,14 @@ const PRIORITIES = ['low', 'normal', 'high', 'urgent'];
 
 export const TicketsPage = () => {
   const navigate = useNavigate();
-  const { user, profile } = useAuthStore();
+  const { user } = useAuthStore();
   const [tickets, setTickets] = useState<SupportTicket[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [creating, setCreating] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [formError, setFormError] = useState<string | null>(null);
 
   // Form states
   const [subject, setSubject] = useState('');
@@ -43,6 +43,7 @@ export const TicketsPage = () => {
       setTickets(data);
     } catch (e) {
       console.error(e);
+      setFormError(e instanceof Error ? e.message : 'Failed to load support tickets.');
     }
     setLoading(false);
   };
@@ -50,13 +51,9 @@ export const TicketsPage = () => {
   const handleCreate = async () => {
     if (!user || !subject.trim() || !message.trim()) return;
     setCreating(true);
+    setFormError(null);
     try {
       const ticket = await createTicket(user.id, subject, category, priority, message);
-      await sendSupportRequestNotification(
-        profile?.full_name || user.email || 'User',
-        user.email || '',
-        subject
-      );
       setShowForm(false);
       setSubject('');
       setCategory('general');
@@ -65,6 +62,7 @@ export const TicketsPage = () => {
       navigate(`/dashboard/support/tickets/${ticket.id}`);
     } catch (e) {
       console.error(e);
+      setFormError(e instanceof Error ? e.message : 'Failed to submit ticket. Please try again.');
     }
     setCreating(false);
   };
@@ -100,6 +98,12 @@ export const TicketsPage = () => {
 
         <div className="flex-1 overflow-y-auto hide-scrollbar space-y-4 pb-4">
           <div className="bg-navy-light/40 border border-white/5 rounded-2xl p-5 space-y-4">
+            {formError && (
+              <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-xs font-bold text-red-400">
+                {formError}
+              </div>
+            )}
+
             {/* Subject */}
             <div>
               <label className="block text-xs font-bold text-gray-400 mb-1.5 uppercase tracking-wider">Subject</label>

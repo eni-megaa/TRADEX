@@ -14,13 +14,15 @@ interface Notification {
   is_read?: boolean;
 }
 
+const STAFF_ROLES = ['admin', 'moderator', 'finance_manager', 'support_agent'];
+
 export const NotificationDropdown = () => {
   const { user, profile } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const isAdmin = profile?.role === 'admin';
+  const isAdmin = !!profile?.role && STAFF_ROLES.includes(profile.role);
 
   const fetchNotifications = async () => {
     if (!user) return;

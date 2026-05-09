@@ -1,0 +1,4 @@
+ALTER TABLE public.kyc_documents
+ADD COLUMN IF NOT EXISTS file_name TEXT,
+ADD COLUMN IF NOT EXISTS file_mime_type TEXT,
+ADD COLUMN IF NOT EXISTS file_size INTEGER;

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { CheckCircle, XCircle } from 'lucide-react';
+import { notifyDepositApproved, notifyDepositRejected, notifyWithdrawalApproved, notifyWithdrawalRejected } from '../../lib/userNotifications';
 
 export const TransactionsAdminPage = ({ type }: { type?: 'deposit' | 'withdrawal' }) => {
   const [transactions, setTransactions] = useState<any[]>([]);
@@ -47,6 +48,17 @@ export const TransactionsAdminPage = ({ type }: { type?: 'deposit' | 'withdrawal
             .update({ balance: Number(walletData.balance) + change })
             .eq('user_id', userId);
         }
+      }
+
+
+
+      // 3. Send notification to user
+      if (type === 'deposit') {
+        if (action === 'approved') notifyDepositApproved(userId, amount);
+        else notifyDepositRejected(userId, amount);
+      } else if (type === 'withdrawal') {
+        if (action === 'approved') notifyWithdrawalApproved(userId, amount);
+        else notifyWithdrawalRejected(userId, amount);
       }
 
       fetchTransactions();

@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Phone, Clock, Loader2, CheckCircle, Calendar, MessageSquare } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { createCallbackRequest, fetchUserCallbacks, type CallbackRequest } from '../../lib/supportService';
-import { createAdminNotification } from '../../lib/adminNotifications';
 
 const STATUS_CONFIG: Record<string, { color: string; bg: string; label: string }> = {
   pending: { color: 'text-amber-400', bg: 'bg-amber-500/15 border-amber-500/30', label: 'Pending' },
@@ -25,7 +24,7 @@ const TIME_SLOTS = [
 
 export const CallbackRequestPage = () => {
   const navigate = useNavigate();
-  const { user, profile } = useAuthStore();
+  const { user } = useAuthStore();
   const [phone, setPhone] = useState('');
   const [reason, setReason] = useState('');
   const [preferredTime, setPreferredTime] = useState('');
@@ -34,6 +33,7 @@ export const CallbackRequestPage = () => {
   const [callbacks, setCallbacks] = useState<CallbackRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
     loadCallbacks();
@@ -47,6 +47,7 @@ export const CallbackRequestPage = () => {
       setCallbacks(data);
     } catch (e) {
       console.error(e);
+      setFormError(e instanceof Error ? e.message : 'Failed to load callback requests.');
     }
     setLoading(false);
   };
@@ -54,13 +55,9 @@ export const CallbackRequestPage = () => {
   const handleSubmit = async () => {
     if (!user || !phone.trim() || !preferredTime) return;
     setSubmitting(true);
+    setFormError(null);
     try {
       await createCallbackRequest(user.id, phone, reason, preferredTime);
-      await createAdminNotification({
-        title: 'Callback Request',
-        message: `${profile?.full_name || user.email} requested a callback at ${preferredTime}. Phone: ${phone}`,
-        type: 'support_ticket',
-      });
       setSubmitted(true);
       setShowForm(false);
       setPhone('');
@@ -70,6 +67,7 @@ export const CallbackRequestPage = () => {
       setTimeout(() => setSubmitted(false), 4000);
     } catch (e) {
       console.error(e);
+      setFormError(e instanceof Error ? e.message : 'Failed to request callback. Please try again.');
     }
     setSubmitting(false);
   };
@@ -114,6 +112,12 @@ export const CallbackRequestPage = () => {
         {/* New Request Form */}
         {showForm && (
           <div className="bg-gradient-to-br from-orange-500/10 to-amber-500/10 border border-orange-500/20 rounded-2xl p-5 space-y-4 animate-in">
+            {formError && (
+              <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-xs font-bold text-red-400">
+                {formError}
+              </div>
+            )}
+
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-black text-white flex items-center space-x-2">
                 <Phone className="w-4 h-4 text-orange-400" />

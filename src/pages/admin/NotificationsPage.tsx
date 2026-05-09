@@ -100,7 +100,7 @@ export const NotificationsPage = () => {
           title: formData.title,
           message: formData.message,
           type: formData.type,
-          target: `Specific (${selectedUserIds.length} users)`,
+          target: 'specific',
           category: 'broadcast',
         }]);
 
@@ -165,7 +165,8 @@ export const NotificationsPage = () => {
       case 'active': return 'Active Traders';
       case 'verified': return 'KYC Verified';
       case 'admins': return 'Admin Staff';
-      default: return target; // Handles "Specific (X users)"
+      case 'specific': return 'Specific Users';
+      default: return target;
     }
   };
 

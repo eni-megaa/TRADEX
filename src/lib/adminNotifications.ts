@@ -1,8 +1,8 @@
 import { supabase } from './supabase';
 
 /**
- * Creates an admin-event notification that appears in the admin's bell icon.
- * These are NOT broadcast notifications — they are system events about user activity.
+ * Creates an admin-event notification that appears in the admin bell.
+ * These are system events about user activity, not broadcasts to users.
  */
 export const createAdminNotification = async ({
   title,
@@ -14,13 +14,17 @@ export const createAdminNotification = async ({
   type: 'new_user' | 'kyc_submission' | 'deposit_request' | 'withdrawal_request' | 'support_ticket';
 }) => {
   try {
+    const { data: authData } = await supabase.auth.getUser();
+    const actorId = authData.user?.id;
+    if (!actorId) return;
+
     await supabase.from('notifications').insert([{
+      user_id: actorId,
       title,
       message,
       type,
       target: 'admins',
       category: 'admin_event',
-      // user_id is null — it's a system-level notification for all admins
     }]);
   } catch (error) {
     console.error('Failed to create admin notification:', error);
@@ -28,7 +32,7 @@ export const createAdminNotification = async ({
 };
 
 /**
- * Specifically for support requests from users
+ * Specifically for support requests from users.
  */
 export const sendSupportRequestNotification = async (userName: string, userEmail: string, subject: string) => {
   return createAdminNotification({

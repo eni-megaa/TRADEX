@@ -127,15 +127,15 @@ export const SettingsPage = () => {
               <div className="flex flex-col p-3 bg-navy/40 rounded-2xl border border-white/5 hover:border-white/10 transition-colors">
                 <span className="text-[9px] text-gray-500 font-bold uppercase tracking-widest mb-1">KYC Status</span>
                 <span className={`text-xs font-black capitalize w-fit px-2 py-0.5 rounded-lg mt-1 ${
-                  profile?.kyc_status === 'verified' ? 'bg-green-500/20 text-green-500 border border-green-500/20' :
-                  profile?.kyc_status === 'pending' ? 'bg-orange-500/20 text-orange-500 border border-orange-500/20' :
+                  profile?.kyc_status === 'approved' ? 'bg-green-500/20 text-green-500 border border-green-500/20' :
+                  profile?.kyc_status === 'under_review' ? 'bg-orange-500/20 text-orange-500 border border-orange-500/20' :
                   'bg-red-500/20 text-red-500 border border-red-500/20'
                 }`}>
-                  {profile?.kyc_status || 'unverified'}
+                  {profile?.kyc_status?.replace('_', ' ') || 'not started'}
                 </span>
               </div>
 
-              {profile?.kyc_status !== 'verified' && (
+              {profile?.kyc_status !== 'approved' && (
                 <button className="w-full text-center py-3 rounded-2xl bg-white/5 hover:bg-white/10 text-xs font-bold text-white transition-colors border border-white/5 mt-2">
                   Verify Account
                 </button>

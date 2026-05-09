@@ -3,12 +3,14 @@ import { useAuthStore } from '../store/authStore';
 import { useSettingsStore } from '../store/settingsStore';
 import { KYCModal } from '../components/dashboard/KYCModal';
 
+const STAFF_ROLES = ['admin', 'moderator', 'finance_manager', 'support_agent'];
+
 export const useKYCGuard = () => {
   const { profile } = useAuthStore();
   const { kycRequired, settingsLoaded } = useSettingsStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const isAdmin = profile?.role === 'admin';
+  const isAdmin = !!profile?.role && STAFF_ROLES.includes(profile.role);
 
   // Don't restrict access while settings are still loading to prevent flash
   if (!settingsLoaded) {

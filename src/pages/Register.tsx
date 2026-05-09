@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { createAdminNotification } from '../lib/adminNotifications';
 import { Loader2, Eye, EyeOff } from 'lucide-react';
 
 export const Register = () => {
@@ -49,13 +48,6 @@ export const Register = () => {
       setError(error.message);
       setLoading(false);
     } else {
-      // Notify admins about new user registration (fire-and-forget, may silently fail if session not yet active)
-      createAdminNotification({
-        title: 'New User Registration',
-        message: `${firstName} ${lastName} (${email}) has just registered on the platform.`,
-        type: 'new_user'
-      });
-
       setSuccessMsg('Registration successful! Please check your email to verify your account.');
       setLoading(false);
       // Optional: automatically navigate to login after a few seconds

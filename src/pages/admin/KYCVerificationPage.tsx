@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { CheckCircle, XCircle, FileText, User as UserIcon, Eye, Download, Clock, ShieldCheck, ShieldAlert } from 'lucide-react';
+import { notifyKYCApproved, notifyKYCRejected } from '../../lib/userNotifications';
+
+const REQUIRED_DOCUMENT_TYPES = ['id_front', 'id_back', 'selfie', 'poa'];
 
 export const KYCVerificationPage = () => {
   const [submissions, setSubmissions] = useState<any[]>([]);
@@ -51,9 +54,35 @@ export const KYCVerificationPage = () => {
         })
         .eq('id', docId);
 
-      // 2. Update user KYC status and level
-      const userStatus = status === 'verified' ? 'approved' : 'rejected';
-      const userLevel = status === 'verified' ? 2 : 0;
+      // 2. Update user KYC status only after the required document set is complete.
+      let userStatus = status === 'verified' ? 'under_review' : 'rejected';
+      let userLevel = 0;
+
+      if (status === 'verified') {
+        const { data: userDocs, error: docsError } = await supabase
+          .from('kyc_documents')
+          .select('document_type, status, created_at')
+          .eq('user_id', userId)
+          .order('created_at', { ascending: false });
+
+        if (docsError) throw docsError;
+
+        const latestDocsByType = new Map<string, string>();
+        for (const doc of userDocs || []) {
+          if (!latestDocsByType.has(doc.document_type)) {
+            latestDocsByType.set(doc.document_type, doc.status);
+          }
+        }
+
+        const hasCompleteVerifiedSet = REQUIRED_DOCUMENT_TYPES.every(
+          (docType) => latestDocsByType.get(docType) === 'verified'
+        );
+
+        if (hasCompleteVerifiedSet) {
+          userStatus = 'approved';
+          userLevel = 2;
+        }
+      }
       
       await supabase
         .from('users')
@@ -69,6 +98,12 @@ export const KYCVerificationPage = () => {
         user_id: userId,
         details: { doc_id: docId, notes }
       }]);
+
+
+
+      // 4. Send notification to user
+      if (userStatus === 'approved') notifyKYCApproved(userId);
+      else if (userStatus === 'rejected') notifyKYCRejected(userId, notes);
 
       fetchSubmissions();
       setSelectedDoc(null);
@@ -171,7 +206,9 @@ export const KYCVerificationPage = () => {
                     </div>
 
                     <div className="aspect-[4/3] bg-navy/50 rounded-2xl border border-white/5 flex items-center justify-center overflow-hidden group relative">
-                        {docUrl ? (
+                        {docUrl && selectedDoc.file_mime_type === 'application/pdf' ? (
+                            <iframe src={docUrl} title="Document PDF" className="w-full h-full bg-white" />
+                        ) : docUrl ? (
                             <img src={docUrl} alt="Document" className="w-full h-full object-cover" />
                         ) : (
                             <div className="text-center space-y-4">
@@ -194,6 +231,36 @@ export const KYCVerificationPage = () => {
                             <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Document Number</p>
                             <p className="text-white font-mono font-bold">{selectedDoc.id.split('-')[0].toUpperCase()}</p>
                         </div>
+                        <div className="p-4 bg-navy/50 rounded-2xl border border-white/5">
+                            <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">File</p>
+                            <p className="text-white font-bold truncate">{selectedDoc.file_name || selectedDoc.document_url}</p>
+                            {selectedDoc.file_size && (
+                                <p className="text-gray-500 text-xs font-mono mt-1">{(selectedDoc.file_size / 1024 / 1024).toFixed(2)} MB</p>
+                            )}
+                        </div>
+                        {selectedDoc.personal_info && (
+                            <div className="p-4 bg-navy/50 rounded-2xl border border-white/5 space-y-3">
+                                <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Applicant Details</p>
+                                <div className="grid grid-cols-2 gap-3 text-xs">
+                                    <div>
+                                        <p className="text-gray-500 font-bold uppercase text-[9px] mb-1">DOB</p>
+                                        <p className="text-white font-bold">{selectedDoc.personal_info.dob || 'Not provided'}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-gray-500 font-bold uppercase text-[9px] mb-1">Country</p>
+                                        <p className="text-white font-bold">{selectedDoc.personal_info.country || 'Not provided'}</p>
+                                    </div>
+                                    <div className="col-span-2">
+                                        <p className="text-gray-500 font-bold uppercase text-[9px] mb-1">Address</p>
+                                        <p className="text-white font-bold leading-relaxed">
+                                            {[selectedDoc.personal_info.address, selectedDoc.personal_info.city]
+                                                .filter(Boolean)
+                                                .join(', ') || 'Not provided'}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     {selectedDoc.status === 'pending' ? (

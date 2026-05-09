@@ -54,23 +54,27 @@ export const createTicket = async (
   priority: string,
   initialMessage: string
 ) => {
-  // 1. Create ticket
-  const { data: ticket, error: ticketErr } = await supabase
-    .from('support_tickets')
-    .insert([{ user_id: userId, subject, category, priority }])
-    .select()
-    .single();
+  if (!userId) throw new Error('You must be signed in to create a support ticket.');
 
-  if (ticketErr || !ticket) throw ticketErr || new Error('Failed to create ticket');
+  const { data: ticketId, error } = await supabase.rpc('create_support_ticket', {
+    ticket_subject: subject,
+    ticket_category: category,
+    ticket_priority: priority,
+    initial_message: initialMessage,
+  });
 
-  // 2. Attach the initial message
-  const { error: msgErr } = await supabase
-    .from('support_messages')
-    .insert([{ ticket_id: ticket.id, sender_id: userId, message: initialMessage, is_admin: false }]);
+  if (error || !ticketId) throw error || new Error('Failed to create ticket');
 
-  if (msgErr) throw msgErr;
-
-  return ticket;
+  return {
+    id: ticketId,
+    user_id: userId,
+    subject,
+    category,
+    priority,
+    status: 'open',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  } as SupportTicket;
 };
 
 /** Fetch all tickets for the current user */
@@ -137,14 +141,27 @@ export const createCallbackRequest = async (
   reason: string,
   preferredTime: string
 ) => {
-  const { data, error } = await supabase
-    .from('callback_requests')
-    .insert([{ user_id: userId, phone_number: phoneNumber, reason, preferred_time: preferredTime }])
-    .select()
-    .single();
+  if (!userId) throw new Error('You must be signed in to request a callback.');
 
-  if (error) throw error;
-  return data;
+  const { data: callbackId, error } = await supabase.rpc('create_callback_request', {
+    callback_phone_number: phoneNumber,
+    callback_reason: reason,
+    callback_preferred_time: preferredTime,
+  });
+
+  if (error || !callbackId) throw error || new Error('Failed to request callback');
+
+  return {
+    id: callbackId,
+    user_id: userId,
+    phone_number: phoneNumber,
+    reason,
+    preferred_time: preferredTime,
+    status: 'pending',
+    admin_notes: null,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  } as CallbackRequest;
 };
 
 export const fetchUserCallbacks = async (userId: string): Promise<CallbackRequest[]> => {
